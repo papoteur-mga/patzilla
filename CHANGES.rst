@@ -5,6 +5,9 @@ PatZilla CHANGES
 
 Development
 ===========
+- [qa] Tests with Python 3
+- [mw] Replace Bunch with Munch
+- [mw] Switch to Python 3
 - [mw] Fix dependencies for Python 2 compatibility
 - [mw] Update dependencies to resolve security warnings
 - [ui] Update dependencies to resolve security warnings
