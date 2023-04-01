@@ -110,16 +110,16 @@ class Dossier(object):
             df = pandas.DataFrame(entries, columns=['number', 'score', 'dismiss', 'seen', 'timestamp', 'url'])
             df.rename(columns={'number': 'document'}, inplace=True)
 
+            # Amend "NaN" boolean values to "False"
+            df['seen'].fillna(value=False, inplace=True)
+            df['dismiss'].fillna(value=False, inplace=True)
+
+            # Cast to boolean type
+            df['seen']      = df['seen'].astype('bool')
+            df['dismiss']   = df['dismiss'].astype('bool')
+
             # Aggregate all DataFrame items
-            self.df_documents = self.df_documents.append(df)
-
-        # Amend "NaN" boolean values to "False"
-        self.df_documents['seen'].fillna(value=False, inplace=True)
-        self.df_documents['dismiss'].fillna(value=False, inplace=True)
-
-        # Cast to boolean type
-        self.df_documents['seen']      = self.df_documents['seen'].astype('bool')
-        self.df_documents['dismiss']   = self.df_documents['dismiss'].astype('bool')
+            self.df_documents = pandas.concat([self.df_documents, df])
 
 
         # Queries
@@ -508,7 +508,7 @@ class DossierXlsx(Dossier):
         self.write_comments_sheet()
 
         # Save/persist ExcelWriter model
-        self.writer.save()
+        self.writer.close()
 
         # Get hold of buffer content
         payload = buffer.getvalue()
