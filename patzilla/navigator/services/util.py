@@ -10,7 +10,7 @@ from cornice.service import Service
 from pyramid.settings import asbool
 from pyramid.threadlocal import get_current_request
 from pyramid.httpexceptions import HTTPServerError, HTTPBadRequest
-from patzilla.navigator.export import Dossier, DossierXlsx
+from patzilla.navigator.export import Dossier, DossierXlsx, DossierText
 from patzilla.util.config import read_list
 from patzilla.util.cql.util import pair_to_cql
 from patzilla.util.data.container import SmartMunch
@@ -308,6 +308,11 @@ def export_util_handler(request):
                 # TODO: Add comments inline into numberlist
                 dossier = Dossier(data)
                 payload = dossier.to_csv(dossier.df_documents)
+
+            elif output_format == 'odt':
+                # Generate Text document with summaries
+                payload = DossierText(data).create()
+
 
             elif output_format == 'zip':
                 dossier = Dossier(data)
